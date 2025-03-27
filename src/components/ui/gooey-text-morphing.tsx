@@ -19,7 +19,7 @@ interface GooeyTextProps {
 
 export function GooeyText({
   texts,
-  morphTime = 2,
+  morphTime = 1,
   cooldownTime = 4,
   className,
   textClassName

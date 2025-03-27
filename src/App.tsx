@@ -4,6 +4,8 @@ import { Instagram, Facebook, Mail, ChevronDown } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
+import { WavyBackground } from './components/ui/wavy-background';
+import { GooeyText } from "./components/ui/gooey-text-morphing";
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
@@ -126,8 +128,8 @@ function App() {
       </div>
 
       {/* Gallery Section */}
-      <div className="py-16 px-4 bg-[#FCF2CC]">
-        <div className="max-w-[1800px] mx-auto">
+      <div className="py-16 bg-[#FCF2CC]">
+        <div className="max-w-[1400px] mx-auto px-4">
           <Swiper
             modules={[Navigation, Pagination]}
             spaceBetween={40}
@@ -148,13 +150,38 @@ function App() {
                   <img
                     src={image}
                     alt={`Gallery image ${index + 1}`}
-                    className="w-full h-[1000px] object-cover"
+                    className="w-full aspect-[3/4] object-cover"
                   />
                 </div>
               </SwiperSlide>
             ))}
           </Swiper>
         </div>
+      </div>
+
+      {/* Wavy Background Section with Gooey Text */}
+      <div className="bg-[#FCF2CC]">
+        <WavyBackground 
+          className="max-w-4xl mx-auto text-center px-4"
+          colors={["#B48406", "#FFA500", "#F2F0E9"]}
+          waveOpacity={0.2}
+          blur={10}
+        >
+          <div className="h-[140px] md:h-[180px] w-[420px] flex items-center justify-center mt-4">
+            <GooeyText
+              texts={[
+                "Höj din smyckessamling med skräddarsydd design",
+                "lika unik som du.",
+                "Låt oss skapa något oförglömligt",
+                "din historia förtjänar att glänsa."
+              ]}
+              morphTime={1}
+              cooldownTime={2.5}
+              className="font-nunitosans font-bold"
+              textClassName="text-[14px] md:text-[24px] text-black"
+            />
+          </div>
+        </WavyBackground>
       </div>
 
       <div ref={butikRef} className="py-20 px-4 bg-[#FCF2CC]">

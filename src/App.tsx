@@ -171,8 +171,8 @@ function App() {
                 { text: "din historia", mobileSize: "44px", desktopSize: "64px" },
                 { text: "förtjänar att glänsa.", mobileSize: "34px", desktopSize: "58px" }
               ]}
-              morphTime={1}
-              cooldownTime={3}
+              morphTime={2}
+              cooldownTime={4}
               className="font-nunitosans-italic"
               textClassName="font-bold"
             />

@@ -158,7 +158,7 @@ function App() {
       </div>
 
       {/* Gooey Text Section */}
-      <div className="bg-[#FCF2CC] py-12">
+      <div className="bg-[#FCF2CC]">
         <div className="max-w-3xl mx-auto">
           <div className="h-[100px] md:h-[130px] w-full flex items-center justify-center">
             <GooeyText

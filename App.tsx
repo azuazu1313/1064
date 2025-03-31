@@ -27,7 +27,30 @@ function App() {
   ];
 
   const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
-    ref.current?.scrollIntoView({ behavior: 'smooth' });
+  if (!ref.current) return;
+
+  const targetPosition = ref.current.offsetTop;
+  const startPosition = window.scrollY;
+  const distance = targetPosition - startPosition;
+  const duration = 1200; // Adjust for a slower, luxurious feel
+  let startTime: number | null = null;
+
+  const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3); // Smoother, more elegant easing
+
+  const animation = (currentTime: number) => {
+    if (startTime === null) startTime = currentTime;
+    const timeElapsed = currentTime - startTime;
+    const progress = Math.min(timeElapsed / duration, 1);
+    const easedProgress = easeOutCubic(progress);
+
+    window.scrollTo(0, startPosition + distance * easedProgress);
+
+    if (timeElapsed < duration) {
+      requestAnimationFrame(animation);
+    }
+  };
+
+  requestAnimationFrame(animation);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

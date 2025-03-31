@@ -163,17 +163,17 @@ function App() {
           <div className="h-[100px] md:h-[130px] w-full flex items-center justify-center">
             <GooeyText
               texts={[
-                { text: "Höj din smyckessamling", mobileSize: "30px", desktopSize: "56px" },
-                { text: "med skräddarsydd design", mobileSize: "30px", desktopSize: "56px" },
-                { text: "lika unik som du.", mobileSize: "34px", desktopSize: "61px" },
-                { text: "Låt oss skapa", mobileSize: "38px", desktopSize: "64px" },
-                { text: "något oförglömligt", mobileSize: "32px", desktopSize: "60px" },
-                { text: "din historia", mobileSize: "44px", desktopSize: "64px" },
-                { text: "förtjänar att glänsa.", mobileSize: "34px", desktopSize: "58px" }
+                { text: "Höj din smyckessamling", mobileSize: "42px", desktopSize: "90px" },
+                { text: "med skräddarsydd design", mobileSize: "42px", desktopSize: "90px" },
+                { text: "lika unik som du.", mobileSize: "51px", desktopSize: "98px" },
+                { text: "Låt oss skapa", mobileSize: "57px", desktopSize: "102px" },
+                { text: "något oförglömligt", mobileSize: "48px", desktopSize: "96px" },
+                { text: "din historia", mobileSize: "66px", desktopSize: "102px" },
+                { text: "förtjänar att glänsa.", mobileSize: "51px", desktopSize: "93px" }
               ]}
-              morphTime={2}
-              cooldownTime={4}
-              className="font-nunitosans-italic"
+              morphTime={1.50}
+              cooldownTime={3.50}
+              className="font-birthstone"
               textClassName="font-bold"
             />
           </div>

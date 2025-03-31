@@ -249,7 +249,7 @@ function App() {
             <img
               src="https://i.imgur.com/FWnwX6j.png"
               alt="1064 Jewelry Logo"
-              className="h-96 mb-8 w-auto"
+              className="h-[48px] mb-2 w-auto"
             />
             <div className="flex space-x-6">
               <a href="https://www.instagram.com/1064jewelry/" target="_blank" rel="noopener noreferrer"

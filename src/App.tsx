@@ -117,9 +117,9 @@ function App() {
       {/* Brand Introduction Section */}
       <div className="py-24 px-4 bg-[#FCF2CC]">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-5xl md:text-7xl font-birthstone mb-6">Vårt Löfte</h2>
+          <h2 className="text-[40px] md:text-5xl font-birthstone mb-6">Vårt Löfte</h2>
           <div className="w-16 h-0.5 bg-[#B48406] mx-auto mb-12"></div>
-          <p className="text-lg md:text-2xl font-nunitosans leading-relaxed mb-1">
+          <p className="text-[14px] md:text-xl font-nunitosans leading-relaxed mb-1">
             Vi på 1064 Jewelry förenar skickligt hantverk med modern, tidlös design. Varje smycke är ett unikt konstverk som noggrant formas efter din personliga vision. Vare sig du söker en perfekt vigselring eller önskar ge nytt liv åt en älskad familjeklenod – hos oss utförs varje beställning med precision och kärlek för att skapa något alldeles unikt.
           </p>
         </div>
@@ -183,7 +183,7 @@ function App() {
 
       <div ref={butikRef} className="py-20 px-4 bg-[#FCF2CC]">
         <div className="max-w-4xl mx-auto flex flex-col items-center">
-          <h2 className="text-3xl font-bold mb-8 font-optima-italic">HITTA TILL OSS</h2>
+          <h2 className="text-3xl mb-8 font-optima">HITTA TILL OSS</h2>
           <iframe 
             src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d4069.6163947734212!2d18.073433!3d59.336156!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x465f9d5ca20dc671%3A0x21871c2a1a74675d!2s1064!5e0!3m2!1sen!2sse!4v1740895469055!5m2!1sen!2sse" 
             width="100%" 
@@ -195,51 +195,71 @@ function App() {
             title="Store Location"
             className="mb-8"
           ></iframe>
-          <p className="text-1xl font-medium font-optima-italic">MÅN-FRE 10-19, LÖR 10-17, SÖN 12-17</p>
+          <p className="text-1xl font-medium font-nunitosans">MÅN-FRE 10-19, LÖR 10-17, SÖN 12-17</p>
         </div>
       </div>
 
+      {/* Combined Contact & Newsletter Section */}
       <div className="py-16 bg-[#FCF2CC]">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row">
-            <div className="w-full md:w-1/2 flex items-center justify-center mb-8 md:mb-0">
-              <div className="text-center">
-                <h2 className="text-3xl font-bold mb-6 font-optima-italic">KONTAKTA OSS</h2>
-                <p className="text-xl mb-2 font-optima-italic">Telefon: 08-611 10 64</p>
-                <p className="text-xl font-optima-italic">E-post: 1064@1064.se</p>
-              </div>
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-optima mb-2">KONTAKT & NYHETSBREV</h2>
+              <p className="text-lg font-nunitosans text-gray-700">
+                Håll kontakt för inspiration och exklusiva erbjudanden
+              </p>
             </div>
             
-            <div className="w-full md:w-1/2 h-full">
-              <img 
-                src="https://i.imgur.com/3TaU76Q.jpeg" 
-                alt="Jewelry Display" 
-                className="w-full h-full object-cover"
-              />
+            <div className="flex flex-col md:flex-row gap-12">
+              {/* Contact Information */}
+              <div className="flex-1">
+                <div className="text-left">
+                  <div className="space-y-4">
+                    <div>
+                      <p className="text-lg font-nunitosans font-bold mb-1">Telefon</p>
+                      <p className="text-xl font-nunitosans">08-611 10 64</p>
+                    </div>
+                    <div>
+                      <p className="text-lg font-nunitosans font-bold mb-1">E-post</p>
+                      <a 
+                        href="mailto:1064@1064.se"
+                        className="text-xl font-nunitosans hover:text-[#B48406] transition-colors duration-300"
+                      >
+                        1064@1064.se
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Newsletter Signup */}
+              <div className="flex-1">
+                <div className="text-left">
+                  <p className="text-lg font-nunitosans mb-4">
+                    Prenumerera och var först med det senaste från ateljén:
+                  </p>
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="relative">
+                      <input 
+                        type="email" 
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Din e-postadress" 
+                        className="w-full px-0 py-2 bg-transparent border-b-2 border-gray-300 focus:border-[#B48406] focus:outline-none transition-colors duration-300 font-optima"
+                        required
+                      />
+                    </div>
+                    <button 
+                      type="submit" 
+                      className="w-full py-3 bg-[#B48406] text-white font-nunitosans hover:bg-[#8e6805] transition-colors duration-300"
+                    >
+                      Få tillgång
+                    </button>
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div className="py-16 px-4 bg-[#FCF2CC]">
-        <div className="max-w-md mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-8 font-optima-italic">Bli först med det senaste.</h2>
-          <form onSubmit={handleSubmit}>
-            <input 
-              type="email" 
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Din e-postadress" 
-              className="w-full px-4 py-3 mb-4 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#B48406] font-optima"
-              required
-            />
-            <button 
-              type="submit" 
-              className="w-full py-3 rounded-md bg-[#B48406] text-white font-medium hover:bg-[#8e6805] transition-colors duration-300 font-optima"
-            >
-              Få tillgång
-            </button>
-          </form>
         </div>
       </div>
 
@@ -249,7 +269,7 @@ function App() {
             <img
               src="https://i.imgur.com/FWnwX6j.png"
               alt="1064 Jewelry Logo"
-              className="h-96 mb-8 w-auto"
+              className="h-[188px] mb-2 w-auto"
             />
             <div className="flex space-x-6">
               <a href="https://www.instagram.com/1064jewelry/" target="_blank" rel="noopener noreferrer"
@@ -267,7 +287,7 @@ function App() {
             </div>
           </div>
 
-          <p className="text-center text-sm text-gray-600 mt-8 font-optima-italic font-bold">
+          <p className="text-center text-[12px] md:text-sm text-gray-600 mt-8 font-unna font-bold">
             2025 - 1064 Jewelry Stockholm AB | Alla rättigheter förbehållna.
           </p>
         </div>

@@ -270,6 +270,7 @@ function App() {
               src="https://i.imgur.com/FWnwX6j.png"
               alt="1064 Jewelry Logo"
               className="h-[188px] mb-2 w-auto"
+              onClick={() => scrollToSection(topRef)}
             />
             <div className="flex space-x-6">
               <a href="https://www.instagram.com/1064jewelry/" target="_blank" rel="noopener noreferrer"

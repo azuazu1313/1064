@@ -205,7 +205,7 @@ function App() {
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-8">
               <h2 className="text-[26px] md:text-3xl font-optima mb-2">KONTAKT & NYHETSBREV</h2>
-              <p className="text-lg font-nunitosans text-gray-700">
+              <p className="text-[12px] md:text-lg font-nunitosans text-gray-700">
                 Håll kontakt för inspiration och exklusiva erbjudanden
               </p>
             </div>

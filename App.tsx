@@ -51,7 +51,7 @@ function App() {
   };
 
   requestAnimationFrame(animation);
-  };
+};
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

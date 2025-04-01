@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Instagram, Facebook, Mail, ChevronDown } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Thumbs } from 'swiper/modules';
@@ -12,12 +12,15 @@ function App() {
   const [email, setEmail] = useState('');
   const [isHovering, setIsHovering] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   
   const butikRef = useRef<HTMLDivElement>(null);
   const omOssRef = useRef<HTMLDivElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
   const brandRef = useRef<HTMLDivElement>(null);
   const mainSwiperRef = useRef(null);
+  const thumbsContainerRef = useRef<HTMLDivElement>(null);
+  const thumbsScrollTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const galleryImages = [
     "https://i.imgur.com/UNrNrlx.jpeg",
@@ -30,19 +33,90 @@ function App() {
     "https://i.imgur.com/lEB0fxL.jpeg"
   ];
 
+  // Create a looped array for the preview
+  const loopedGalleryImages = [...galleryImages, ...galleryImages, ...galleryImages];
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Initial centering after component mount
+    if (thumbsContainerRef.current) {
+      const container = thumbsContainerRef.current;
+      const middleSet = galleryImages.length;
+      const initialScrollPosition = (container.scrollWidth / 3) - (container.offsetWidth / 2);
+      container.scrollLeft = initialScrollPosition;
+    }
+  }, []);
+
+  const centerActiveThumb = () => {
+    if (!thumbsContainerRef.current) return;
+
+    const container = thumbsContainerRef.current;
+    const middleSet = galleryImages.length;
+    const activeThumbIndex = activeIndex + middleSet; // Use middle set for centering
+    const activeThumb = container.children[activeThumbIndex] as HTMLElement;
+    
+    if (!activeThumb) return;
+
+    if (thumbsScrollTimeout.current) {
+      clearTimeout(thumbsScrollTimeout.current);
+    }
+
+    thumbsScrollTimeout.current = setTimeout(() => {
+      const containerWidth = container.offsetWidth;
+      const thumbWidth = activeThumb.offsetWidth;
+      const scrollLeft = activeThumb.offsetLeft - (containerWidth / 2) + (thumbWidth / 2);
+
+      container.scrollTo({
+        left: scrollLeft,
+        behavior: 'smooth'
+      });
+    }, 50);
+  };
+
+  useEffect(() => {
+    centerActiveThumb();
+  }, [activeIndex, isMobile]);
+
+  const handleScroll = () => {
+    if (!thumbsContainerRef.current) return;
+
+    const container = thumbsContainerRef.current;
+    const totalWidth = container.scrollWidth;
+    const oneSetWidth = totalWidth / 3;
+
+    // If we scroll past the middle set, reset to the middle
+    if (container.scrollLeft < oneSetWidth / 2) {
+      container.scrollLeft += oneSetWidth;
+    } else if (container.scrollLeft > oneSetWidth * 2) {
+      container.scrollLeft -= oneSetWidth;
+    }
+  };
+
   const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
     ref.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleThumbClick = (index: number) => {
     if (mainSwiperRef.current && mainSwiperRef.current.swiper) {
-      // For looped slider, we need to slide to the real index
-      mainSwiperRef.current.swiper.slideToLoop(index, 300);
+      const normalizedIndex = index % galleryImages.length;
+      mainSwiperRef.current.swiper.slideToLoop(normalizedIndex, 300);
+      setActiveIndex(normalizedIndex);
     }
   };
 
   const handleSlideChange = (swiper) => {
-    // Use realIndex to get the actual slide index regardless of loop
     setActiveIndex(swiper.realIndex);
   };
 
@@ -170,18 +244,27 @@ function App() {
           </Swiper>
 
           <div className="gallery-thumbs-container">
-            <div className="flex gap-2 overflow-x-auto py-2 px-1">
-              {galleryImages.map((image, index) => (
+            <div 
+              ref={thumbsContainerRef}
+              className="flex gap-2 overflow-x-auto py-2 px-1 scroll-smooth"
+              style={{
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+                WebkitOverflowScrolling: 'touch'
+              }}
+              onScroll={handleScroll}
+            >
+              {loopedGalleryImages.map((image, index) => (
                 <div
                   key={`thumb-${index}`}
                   className={`preview-thumb cursor-pointer transition-all duration-300 ${
-                    index === activeIndex ? 'opacity-100 ring-2 ring-[#B48406] scale-105' : 'opacity-40'
+                    index % galleryImages.length === activeIndex ? 'opacity-100 ring-2 ring-[#B48406] scale-105' : 'opacity-40'
                   }`}
                   onClick={() => handleThumbClick(index)}
                 >
                   <img
                     src={image}
-                    alt={`Preview ${index + 1}`}
+                    alt={`Preview ${(index % galleryImages.length) + 1}`}
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />

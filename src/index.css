@@ -137,6 +137,11 @@
   margin-top: 20px;
   width: 100%;
   overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.gallery-thumbs-container::-webkit-scrollbar {
+  display: none;
 }
 
 .preview-thumb {
@@ -146,6 +151,7 @@
   border: 1px solid #B48406;
   transition: all 0.3s ease;
   transform-origin: center;
+  scroll-snap-align: center;
 }
 
 .preview-thumb img {
@@ -166,5 +172,11 @@
   .preview-thumb {
     flex: 0 0 80px;
     height: 80px;
+  }
+
+  .gallery-thumbs-container > div {
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
   }
 }

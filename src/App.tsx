@@ -50,21 +50,21 @@ function App() {
   }, []);
 
   useEffect(() => {
-    // Initial centering after component mount
-    if (thumbsContainerRef.current) {
+    // Initial centering after component mount - only on mobile
+    if (thumbsContainerRef.current && isMobile) {
       const container = thumbsContainerRef.current;
       const middleSet = galleryImages.length;
       const initialScrollPosition = (container.scrollWidth / 3) - (container.offsetWidth / 2);
       container.scrollLeft = initialScrollPosition;
     }
-  }, []);
+  }, [isMobile]);
 
   const centerActiveThumb = () => {
-    if (!thumbsContainerRef.current) return;
+    if (!thumbsContainerRef.current || !isMobile) return;
 
     const container = thumbsContainerRef.current;
     const middleSet = galleryImages.length;
-    const activeThumbIndex = activeIndex + middleSet; // Use middle set for centering
+    const activeThumbIndex = activeIndex + middleSet;
     const activeThumb = container.children[activeThumbIndex] as HTMLElement;
     
     if (!activeThumb) return;
@@ -95,12 +95,18 @@ function App() {
     const container = thumbsContainerRef.current;
     const totalWidth = container.scrollWidth;
     const oneSetWidth = totalWidth / 3;
+    const currentScrollPosition = container.scrollLeft;
 
-    // If we scroll past the middle set, reset to the middle
-    if (container.scrollLeft < oneSetWidth / 2) {
-      container.scrollLeft += oneSetWidth;
-    } else if (container.scrollLeft > oneSetWidth * 2) {
-      container.scrollLeft -= oneSetWidth;
+    // Calculate which set we're currently viewing
+    const currentSet = Math.floor(currentScrollPosition / oneSetWidth);
+
+    // If we're not in the middle set, smoothly scroll to the middle set
+    if (currentSet !== 1) {
+      const targetScrollPosition = oneSetWidth + (currentScrollPosition % oneSetWidth);
+      container.scrollTo({
+        left: targetScrollPosition,
+        behavior: 'smooth'
+      });
     }
   };
 
@@ -109,11 +115,45 @@ function App() {
   };
 
   const handleThumbClick = (index: number) => {
-    if (mainSwiperRef.current && mainSwiperRef.current.swiper) {
-      const normalizedIndex = index % galleryImages.length;
-      mainSwiperRef.current.swiper.slideToLoop(normalizedIndex, 300);
-      setActiveIndex(normalizedIndex);
+    if (!mainSwiperRef.current?.swiper) return;
+
+    const normalizedIndex = index % galleryImages.length;
+    const currentSet = Math.floor(index / galleryImages.length);
+    const middleSet = 1;
+
+    // Always use the clicked thumb's position for smooth scrolling
+    if (thumbsContainerRef.current) {
+      const container = thumbsContainerRef.current;
+      const thumb = container.children[index] as HTMLElement;
+      
+      if (thumb) {
+        const containerWidth = container.offsetWidth;
+        const thumbWidth = thumb.offsetWidth;
+        const scrollLeft = thumb.offsetLeft - (containerWidth / 2) + (thumbWidth / 2);
+
+        // Smooth scroll to the clicked thumb
+        container.scrollTo({
+          left: scrollLeft,
+          behavior: 'smooth'
+        });
+
+        // After scrolling, ensure we're in the middle set
+        setTimeout(() => {
+          if (currentSet !== middleSet) {
+            const middleSetIndex = normalizedIndex + (middleSet * galleryImages.length);
+            const middleThumb = container.children[middleSetIndex] as HTMLElement;
+            
+            if (middleThumb) {
+              const middleScrollLeft = middleThumb.offsetLeft - (containerWidth / 2) + (thumbWidth / 2);
+              container.scrollLeft = middleScrollLeft;
+            }
+          }
+        }, 300); // Wait for the scroll animation to complete
+      }
     }
+
+    mainSwiperRef.current.swiper.slideToLoop(normalizedIndex, 300);
+    setActiveIndex(normalizedIndex);
   };
 
   const handleSlideChange = (swiper) => {

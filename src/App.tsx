@@ -1,15 +1,17 @@
 import React, { useRef, useState } from 'react';
 import { Instagram, Facebook, Mail, ChevronDown } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
+import { Navigation, Pagination, Thumbs } from 'swiper/modules';
 import 'swiper/css';
 import { GooeyText } from "./components/ui/gooey-text-morphing";
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import 'swiper/css/thumbs';
 
 function App() {
   const [email, setEmail] = useState('');
   const [isHovering, setIsHovering] = useState(false);
+  const [thumbsSwiper, setThumbsSwiper] = useState(null);
   
   const butikRef = useRef<HTMLDivElement>(null);
   const omOssRef = useRef<HTMLDivElement>(null);
@@ -92,19 +94,16 @@ function App() {
       </div>
 
       <div className="relative w-full md:h-[56.25vw] h-screen">
-        {/* Desktop Image */}
         <img 
           src="https://i.imgur.com/zo1XeHz.jpeg" 
           alt="Luxury Jewelry Banner" 
           className="hidden md:block w-full h-full object-cover"
         />
-        {/* Mobile Image */}
         <img 
           src="https://i.imgur.com/XPaWPKv.jpeg" 
           alt="Luxury Jewelry Banner Mobile" 
           className="md:hidden w-full h-full object-cover"
         />
-        {/* Scroll Indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
           <ChevronDown 
             size={32} 
@@ -114,7 +113,6 @@ function App() {
         </div>
       </div>
 
-      {/* Brand Introduction Section */}
       <div className="py-24 px-4 bg-[#FCF2CC]">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-[40px] md:text-5xl font-birthstone mb-6">Vårt Löfte</h2>
@@ -125,22 +123,23 @@ function App() {
         </div>
       </div>
 
-      {/* Gallery Section */}
       <div className="py-16 bg-[#FCF2CC]">
         <div className="max-w-[1400px] mx-auto px-4">
           <Swiper
-            modules={[Navigation, Pagination]}
+            modules={[Navigation, Pagination, Thumbs]}
             spaceBetween={40}
             slidesPerView={1}
             navigation
             loop={true}
+            thumbs={{ swiper: thumbsSwiper }}
             breakpoints={{
               768: {
                 slidesPerView: 2,
                 spaceBetween: 40
               }
             }}
-            className="gallery-slider"
+            className="gallery-slider mb-4"
+            slideToClickedSlide={true}
           >
             {galleryImages.map((image, index) => (
               <SwiperSlide key={index}>
@@ -149,6 +148,30 @@ function App() {
                     src={image}
                     alt={`Gallery image ${index + 1}`}
                     className="w-full aspect-[3/4] object-cover"
+                    loading={index < 4 ? "eager" : "lazy"}
+                  />
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+
+          <Swiper
+            onSwiper={setThumbsSwiper}
+            modules={[Navigation, Thumbs]}
+            spaceBetween={10}
+            slidesPerView="auto"
+            watchSlidesProgress={true}
+            className="gallery-thumbs"
+            slideToClickedSlide={true}
+          >
+            {galleryImages.map((image, index) => (
+              <SwiperSlide key={`thumb-${index}`}>
+                <div className="preview-thumb">
+                  <img
+                    src={image}
+                    alt={`Preview ${index + 1}`}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
                   />
                 </div>
               </SwiperSlide>
@@ -157,7 +180,6 @@ function App() {
         </div>
       </div>
 
-      {/* Gooey Text Section */}
       <div className="bg-[#FCF2CC]">
         <div className="max-w-3xl mx-auto">
           <div className="h-[100px] md:h-[130px] w-full flex items-center justify-center">
@@ -199,7 +221,6 @@ function App() {
         </div>
       </div>
 
-      {/* Combined Contact & Newsletter Section */}
       <div className="py-16 bg-[#FCF2CC]">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
@@ -211,7 +232,6 @@ function App() {
             </div>
             
             <div className="flex flex-col md:flex-row gap-12">
-              {/* Contact Information */}
               <div className="flex-1">
                 <div className="text-left">
                   <div className="space-y-4">
@@ -232,7 +252,6 @@ function App() {
                 </div>
               </div>
 
-              {/* Newsletter Signup */}
               <div className="flex-1">
                 <div className="text-left">
                   <p className="text-lg font-nunitosans mb-4">

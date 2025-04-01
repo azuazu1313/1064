@@ -138,8 +138,8 @@ function App() {
       </div>
 
       {/* Brand Introduction Section */}
-      <div ref={brandRef} className="py-24 px-4 bg-[#FCF2CC]">
-        <div className="max-w-3xl mx-auto text-center">
+      <div className="py-24 px-4 bg-[#FCF2CC]">
+        <div ref={brandRef} className="max-w-3xl mx-auto text-center">
           <h2 className="text-5xl md:text-7xl font-birthstone mb-6">Vårt Löfte</h2>
           <div className="w-16 h-0.5 bg-[#B48406] mx-auto mb-12"></div>
           <p className="text-lg md:text-2xl font-nunitosans leading-relaxed mb-1">

@@ -11,11 +11,13 @@ import 'swiper/css/thumbs';
 function App() {
   const [email, setEmail] = useState('');
   const [isHovering, setIsHovering] = useState(false);
-  const [thumbsSwiper, setThumbsSwiper] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   
   const butikRef = useRef<HTMLDivElement>(null);
   const omOssRef = useRef<HTMLDivElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
+  const brandRef = useRef<HTMLDivElement>(null);
+  const mainSwiperRef = useRef(null);
 
   const galleryImages = [
     "https://i.imgur.com/UNrNrlx.jpeg",
@@ -30,6 +32,18 @@ function App() {
 
   const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
     ref.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleThumbClick = (index: number) => {
+    if (mainSwiperRef.current && mainSwiperRef.current.swiper) {
+      // For looped slider, we need to slide to the real index
+      mainSwiperRef.current.swiper.slideToLoop(index, 300);
+    }
+  };
+
+  const handleSlideChange = (swiper) => {
+    // Use realIndex to get the actual slide index regardless of loop
+    setActiveIndex(swiper.realIndex);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -108,16 +122,16 @@ function App() {
           <ChevronDown 
             size={32} 
             className="text-white scroll-indicator cursor-pointer"
-            onClick={() => scrollToSection(butikRef)}
+            onClick={() => scrollToSection(brandRef)}
           />
         </div>
       </div>
 
-      <div className="py-24 px-4 bg-[#FCF2CC]">
+      <div ref={brandRef} className="py-24 px-4 bg-[#FCF2CC]">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-[40px] md:text-5xl font-birthstone mb-6">Vårt Löfte</h2>
           <div className="w-16 h-0.5 bg-[#B48406] mx-auto mb-12"></div>
-          <p className="text-[14px] md:text-xl font-nunitosans leading-relaxed mb-1">
+          <p className="text-[14px] md:text-[19px] font-nunitosans leading-relaxed mb-1">
             Vi på 1064 Jewelry förenar skickligt hantverk med modern, tidlös design. Varje smycke är ett unikt konstverk som noggrant formas efter din personliga vision. Vare sig du söker en perfekt vigselring eller önskar ge nytt liv åt en älskad familjeklenod – hos oss utförs varje beställning med precision och kärlek för att skapa något alldeles unikt.
           </p>
         </div>
@@ -126,12 +140,13 @@ function App() {
       <div className="py-16 bg-[#FCF2CC]">
         <div className="max-w-[1400px] mx-auto px-4">
           <Swiper
-            modules={[Navigation, Pagination, Thumbs]}
+            ref={mainSwiperRef}
+            modules={[Navigation, Pagination]}
             spaceBetween={40}
             slidesPerView={1}
             navigation
             loop={true}
-            thumbs={{ swiper: thumbsSwiper }}
+            onSlideChange={handleSlideChange}
             breakpoints={{
               768: {
                 slidesPerView: 2,
@@ -139,7 +154,6 @@ function App() {
               }
             }}
             className="gallery-slider mb-4"
-            slideToClickedSlide={true}
           >
             {galleryImages.map((image, index) => (
               <SwiperSlide key={index}>
@@ -155,18 +169,16 @@ function App() {
             ))}
           </Swiper>
 
-          <Swiper
-            onSwiper={setThumbsSwiper}
-            modules={[Navigation, Thumbs]}
-            spaceBetween={10}
-            slidesPerView="auto"
-            watchSlidesProgress={true}
-            className="gallery-thumbs"
-            slideToClickedSlide={true}
-          >
-            {galleryImages.map((image, index) => (
-              <SwiperSlide key={`thumb-${index}`}>
-                <div className="preview-thumb">
+          <div className="gallery-thumbs-container">
+            <div className="flex gap-2 overflow-x-auto py-2 px-1">
+              {galleryImages.map((image, index) => (
+                <div
+                  key={`thumb-${index}`}
+                  className={`preview-thumb cursor-pointer transition-all duration-300 ${
+                    index === activeIndex ? 'opacity-100 ring-2 ring-[#B48406] scale-105' : 'opacity-40'
+                  }`}
+                  onClick={() => handleThumbClick(index)}
+                >
                   <img
                     src={image}
                     alt={`Preview ${index + 1}`}
@@ -174,9 +186,9 @@ function App() {
                     loading="lazy"
                   />
                 </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -193,17 +205,17 @@ function App() {
                 { text: "din historia", mobileSize: "66px", desktopSize: "102px" },
                 { text: "förtjänar att glänsa.", mobileSize: "51px", desktopSize: "93px" }
               ]}
-              morphTime={1.50}
-              cooldownTime={3.50}
+              morphTime={1}
+              cooldownTime={3}
               className="font-birthstone"
               textClassName="font-bold"
             />
           </div>
-          <div className="w-16 h-0.5 bg-[#B48406] mx-auto mt-16"></div>
+          <div className="w-16 h-0.5 bg-[#B48406] mx-auto mt-8"></div>
         </div>
       </div>
 
-      <div ref={butikRef} className="py-20 px-4 bg-[#FCF2CC]">
+      <div ref={butikRef} className="py-16 px-4 bg-[#FCF2CC]">
         <div className="max-w-4xl mx-auto flex flex-col items-center">
           <h2 className="text-3xl mb-8 font-optima">HITTA TILL OSS</h2>
           <iframe 

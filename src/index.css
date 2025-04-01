@@ -152,12 +152,19 @@
   transition: all 0.3s ease;
   transform-origin: center;
   scroll-snap-align: center;
+  opacity: 0.6;
 }
 
 .preview-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.preview-thumb.active-thumb {
+  opacity: 1;
+  border: 2px solid #B48406;
+  transform: scale(1.05);
 }
 
 @media (max-width: 768px) {

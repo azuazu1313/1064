@@ -50,17 +50,17 @@ function App() {
   }, []);
 
   useEffect(() => {
-    // Initial centering after component mount - only on mobile
-    if (thumbsContainerRef.current && isMobile) {
+    // Initial centering after component mount - only if element exists
+    if (thumbsContainerRef.current) {
       const container = thumbsContainerRef.current;
       const middleSet = galleryImages.length;
       const initialScrollPosition = (container.scrollWidth / 3) - (container.offsetWidth / 2);
       container.scrollLeft = initialScrollPosition;
     }
-  }, [isMobile]);
+  }, [galleryImages.length]);
 
   const centerActiveThumb = () => {
-    if (!thumbsContainerRef.current || !isMobile) return;
+    if (!thumbsContainerRef.current) return;
 
     const container = thumbsContainerRef.current;
     const middleSet = galleryImages.length;
@@ -87,7 +87,7 @@ function App() {
 
   useEffect(() => {
     centerActiveThumb();
-  }, [activeIndex, isMobile]);
+  }, [activeIndex]);
 
   const handleScroll = () => {
     if (!thumbsContainerRef.current) return;
@@ -97,16 +97,15 @@ function App() {
     const oneSetWidth = totalWidth / 3;
     const currentScrollPosition = container.scrollLeft;
 
-    // Calculate which set we're currently viewing
-    const currentSet = Math.floor(currentScrollPosition / oneSetWidth);
-
-    // If we're not in the middle set, smoothly scroll to the middle set
-    if (currentSet !== 1) {
-      const targetScrollPosition = oneSetWidth + (currentScrollPosition % oneSetWidth);
-      container.scrollTo({
-        left: targetScrollPosition,
-        behavior: 'smooth'
-      });
+    // If we're approaching the end or beginning, jump to the middle set
+    if (currentScrollPosition < oneSetWidth * 0.1 || 
+        currentScrollPosition > oneSetWidth * 1.9) {
+      // Calculate the equivalent position in the middle set
+      const normalizedPosition = currentScrollPosition % oneSetWidth;
+      const targetScrollPosition = oneSetWidth + normalizedPosition;
+      
+      // Use immediate scroll without animation to avoid visible jump
+      container.scrollLeft = targetScrollPosition;
     }
   };
 
@@ -116,43 +115,9 @@ function App() {
 
   const handleThumbClick = (index: number) => {
     if (!mainSwiperRef.current?.swiper) return;
-
+    
     const normalizedIndex = index % galleryImages.length;
-    const currentSet = Math.floor(index / galleryImages.length);
-    const middleSet = 1;
-
-    // Always use the clicked thumb's position for smooth scrolling
-    if (thumbsContainerRef.current) {
-      const container = thumbsContainerRef.current;
-      const thumb = container.children[index] as HTMLElement;
-      
-      if (thumb) {
-        const containerWidth = container.offsetWidth;
-        const thumbWidth = thumb.offsetWidth;
-        const scrollLeft = thumb.offsetLeft - (containerWidth / 2) + (thumbWidth / 2);
-
-        // Smooth scroll to the clicked thumb
-        container.scrollTo({
-          left: scrollLeft,
-          behavior: 'smooth'
-        });
-
-        // After scrolling, ensure we're in the middle set
-        setTimeout(() => {
-          if (currentSet !== middleSet) {
-            const middleSetIndex = normalizedIndex + (middleSet * galleryImages.length);
-            const middleThumb = container.children[middleSetIndex] as HTMLElement;
-            
-            if (middleThumb) {
-              const middleScrollLeft = middleThumb.offsetLeft - (containerWidth / 2) + (thumbWidth / 2);
-              container.scrollLeft = middleScrollLeft;
-            }
-          }
-        }, 300); // Wait for the scroll animation to complete
-      }
-    }
-
-    mainSwiperRef.current.swiper.slideToLoop(normalizedIndex, 300);
+    mainSwiperRef.current.swiper.slideToLoop(normalizedIndex);
     setActiveIndex(normalizedIndex);
   };
 
@@ -294,22 +259,28 @@ function App() {
               }}
               onScroll={handleScroll}
             >
-              {loopedGalleryImages.map((image, index) => (
-                <div
-                  key={`thumb-${index}`}
-                  className={`preview-thumb cursor-pointer transition-all duration-300 ${
-                    index % galleryImages.length === activeIndex ? 'opacity-100 ring-2 ring-[#B48406] scale-105' : 'opacity-40'
-                  }`}
-                  onClick={() => handleThumbClick(index)}
-                >
-                  <img
-                    src={image}
-                    alt={`Preview ${(index % galleryImages.length) + 1}`}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                </div>
-              ))}
+              {loopedGalleryImages.map((image, index) => {
+                // Calculate if this thumbnail should be active
+                const normalizedIndex = index % galleryImages.length;
+                const isActive = normalizedIndex === activeIndex;
+                
+                return (
+                  <div
+                    key={`thumb-${index}`}
+                    className={`preview-thumb cursor-pointer transition-all duration-300 ${
+                      isActive ? 'active-thumb' : ''
+                    }`}
+                    onClick={() => handleThumbClick(index)}
+                  >
+                    <img
+                      src={image}
+                      alt={`Preview ${normalizedIndex + 1}`}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

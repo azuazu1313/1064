@@ -281,12 +281,12 @@ function App() {
             <GooeyText
               texts={[
                 { text: "Höj din smyckessamling", mobileSize: "42px", desktopSize: "90px" },
-                { text: "med skräddarsydd design", mobileSize: "42px", desktopSize: "90px" },
+                { text: "med skräddarsydd design", mobileSize: "41px", desktopSize: "90px" },
                 { text: "lika unik som du.", mobileSize: "51px", desktopSize: "98px" },
                 { text: "Låt oss skapa", mobileSize: "57px", desktopSize: "102px" },
                 { text: "något oförglömligt", mobileSize: "48px", desktopSize: "96px" },
                 { text: "din historia", mobileSize: "66px", desktopSize: "102px" },
-                { text: "förtjänar att glänsa.", mobileSize: "51px", desktopSize: "93px" }
+                { text: "förtjänar att glänsa.", mobileSize: "50px", desktopSize: "93px" }
               ]}
               morphTime={1}
               cooldownTime={3}

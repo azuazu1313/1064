@@ -205,7 +205,7 @@ function App() {
             <img 
               src="https://i.imgur.com/8fXsCd4.png" 
               alt="1064 Jewelry Logo" 
-              className="h-20 mb-4"
+              className="h-20 w-auto mb-4"
             />
           </picture>
           

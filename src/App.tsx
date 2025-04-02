@@ -176,7 +176,7 @@ function App() {
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#B48406] transition-all duration-300 group-hover:w-full"></span>
             </button>
             <button 
-              onClick={() => scrollToSection(omOssRef)}
+              onClick={() => scrollToSection(brandRef)}
               className="text-lg font-medium relative group font-optima"
             >
               OM OSS
@@ -206,7 +206,7 @@ function App() {
         </div>
       </div>
 
-      <div ref={brandRef} className="py-24 px-4 bg-[#FCF2CC]">
+      <div ref={brandRef} className="py-16 px-4 bg-[#FCF2CC]">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-[40px] md:text-5xl font-birthstone mb-6">Vårt Löfte</h2>
           <div className="w-16 h-0.5 bg-[#B48406] mx-auto mb-12"></div>
@@ -216,7 +216,7 @@ function App() {
         </div>
       </div>
 
-      <div className="py-16 bg-[#FCF2CC]">
+      <div className="py-8 bg-[#FCF2CC]">
         <div className="max-w-[1400px] mx-auto px-4">
           <Swiper
             ref={mainSwiperRef}
@@ -327,7 +327,7 @@ function App() {
         </div>
       </div>
 
-      <div className="py-16 bg-[#FCF2CC]">
+      <div className="py-8 bg-[#FCF2CC]">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-8">
